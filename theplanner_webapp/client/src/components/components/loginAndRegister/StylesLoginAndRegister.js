@@ -20,7 +20,8 @@ const useStyles = makeStyles(({
     height: '8ch'
   },
   head: {
-    marginTop: '5%'
+    marginTop: '5%',
+    fontWeight:'bold'
   }
 }))
 
