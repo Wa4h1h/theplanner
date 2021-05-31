@@ -2,7 +2,7 @@
 import { Box, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useStyles from './StylesLoginAndRegister';
@@ -29,7 +29,7 @@ const RegisterPage = () => {
       <Box width='100%' height='100%' display='flex' justifyContent='center' alignItems='center'>
         <Card className={classes.card} elevation={3}>
           <Box p={3} display='flex' flexDirection='column' alignItems='center'>
-            <AccountCircleIcon className={classes.icon} />
+            <AccessTimeIcon className={classes.icon} />
             <Typography className={classes.head} align='center' color='primary' variant='body2'>Sign up</Typography>
             <Box mt={2} display='flex' flexDirection='column' justifyContent='space-between'>
               <FormControl className={classes.input} size='small' variant='outlined'>
