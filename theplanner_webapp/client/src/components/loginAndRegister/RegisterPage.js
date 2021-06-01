@@ -1,10 +1,9 @@
-
+import React from 'react'
 import { Box, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import useStyles from './StylesLoginAndRegister';
 
 
