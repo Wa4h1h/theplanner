@@ -3,8 +3,9 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import HomePage from './Home';
-import LoginPage from './components/components/loginAndRegister/LoginPage';
-import RegisterPage from './components/components/loginAndRegister/RegisterPage';
+import LoginPage from './components/loginAndRegister/LoginPage';
+import RegisterPage from './components/loginAndRegister/RegisterPage';
+import UserProvider from './contexts/UserProvider';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,21 +27,21 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Switch>
-          <Route exact path='/'>
-            <HomePage />
-          </Route>
-          <Route path='/login'>
-            <LoginPage />
-          </Route>
-          <Route path='/register'>
-            <RegisterPage />
-          </Route>
-        </Switch>
-
+        <UserProvider>
+          <CssBaseline />
+          <Switch>
+            <Route exact path='/'>
+              <HomePage />
+            </Route>
+            <Route path='/login'>
+              <LoginPage />
+            </Route>
+            <Route path='/register'>
+              <RegisterPage />
+            </Route>
+          </Switch>
+        </UserProvider>
       </ThemeProvider>
-
     </Router>
   );
 }
