@@ -7,7 +7,7 @@ from flask_cors import CORS
 
 app.register_blueprint(user_ctr,url_prefix='/api/users/')
 app.register_blueprint(task_ctr,url_prefix='/api/tasks/')
-CORS(app)
+CORS(app,resources={r"/api/*": {"origins": "http://localhost:3000"}},supports_credentials=True)
 
 
 
