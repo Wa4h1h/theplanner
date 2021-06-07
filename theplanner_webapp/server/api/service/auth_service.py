@@ -1,5 +1,5 @@
 import re
-from server.api.service.user_service import load_user_by_username
+from api.service.user_service import load_user_by_username
 from flask import request,jsonify,make_response
 from flask_jwt_extended import decode_token
 from api.model.user import User

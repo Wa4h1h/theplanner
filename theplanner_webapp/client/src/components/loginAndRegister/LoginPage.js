@@ -1,13 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import { Box, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useStyles from './StylesLoginAndRegister';
 import axios from '../../utils';
 import { userContext } from '../../contexts/UserProvider';
-import { useHistory } from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 
 
@@ -16,10 +17,11 @@ const LoginPage = () => {
   const [username_, setUsername] = useState('');
   const [password_, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser } = useContext(userContext);
+  const { user, setUser } = useContext(userContext);
   const history = useHistory();
+  const [open,setOpen]=useState(user.newU);
 
-  
+
 
   const changeUserInfo = (e) => {
     if (e.target.id === 'username-input')
@@ -35,14 +37,17 @@ const LoginPage = () => {
           username: username_,
           password: password_
         })
-        setUser({
-          id: res.data.id,
-          username: username_
+        setUser(prev => {
+          return {
+            ...prev,
+            id: res.data.id,
+            username: username_
+          }
         })
         localStorage.setItem('loggedIn', JSON.stringify({
           id: res.data.id,
           username: username_,
-          loggedIn:true
+          newU: false
         }))
         history.push('/');
       } catch (err) {
@@ -53,44 +58,53 @@ const LoginPage = () => {
   }
 
   return (
-    <div className={classes.main}>
-      <Box width='100%' height='100%' display='flex' justifyContent='center' alignItems='center'>
-        <Card className={classes.card} elevation={3}>
-          <Box height='100%' display='flex' flexDirection='column' justifyContent='space-between'>
-            <Box p={3} display='flex' flexDirection='column' alignItems='center'>
-              <AccountCircleIcon className={classes.icon} />
-              <Typography className={classes.head} align='center' color='primary' variant='body2'>Login with your username and password</Typography>
-              <Box mt={10} display='flex' flexDirection='column' justifyContent='space-between'>
-                <FormControl className={classes.input} size='small' variant='outlined'>
-                  <InputLabel htmlFor='username-input'>username</InputLabel>
-                  <OutlinedInput value={username_} onChange={changeUserInfo} id='username-input' labelWidth={70} />
-                </FormControl>
-                <FormControl className={classes.input} size='small' variant='outlined'>
-                  <InputLabel htmlFor='password-input'>password</InputLabel>
-                  <OutlinedInput value={password_} onChange={changeUserInfo} id='password-input' labelWidth={70} endAdornment={
-                    <InputAdornment position='end'>
-                      <IconButton onClick={() => { setShowPassword(!showPassword) }} edge='end'>
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                    type={showPassword ? 'text' : 'password'}
-                  />
-                </FormControl>
-              </Box>
-              <Button variant='contained' color='secondary' onClick={login}>Login</Button>
-            </Box>
-            <Box display='flex' width='100%' mb={0} justifyContent='flex-end'>
-              <Link style={{ textDecoration: 'none' }} to='/register'>
-                <Box p={2}>
-                  <Typography color='secondary' variant='caption'>Dont have an account?then register </Typography>
+    <Fragment>
+      <div className={classes.main}>
+        <Box width='100%' height='100%' display='flex' justifyContent='center' alignItems='center'>
+          <Card className={classes.card} elevation={3}>
+            <Box height='100%' display='flex' flexDirection='column' justifyContent='space-between'>
+              <Box p={3} display='flex' flexDirection='column' alignItems='center'>
+                <AccountCircleIcon className={classes.icon} />
+                <Typography className={classes.head} align='center' color='primary' variant='body2'>Login with your username and password</Typography>
+                <Box mt={10} display='flex' flexDirection='column' justifyContent='space-between'>
+                  <FormControl className={classes.input} size='small' variant='outlined'>
+                    <InputLabel htmlFor='username-input'>username</InputLabel>
+                    <OutlinedInput value={username_} onChange={changeUserInfo} id='username-input' labelWidth={70} />
+                  </FormControl>
+                  <FormControl className={classes.input} size='small' variant='outlined'>
+                    <InputLabel htmlFor='password-input'>password</InputLabel>
+                    <OutlinedInput value={password_} onChange={changeUserInfo} id='password-input' labelWidth={70} endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton onClick={() => { setShowPassword(!showPassword) }} edge='end'>
+                          {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                      type={showPassword ? 'text' : 'password'}
+                    />
+                  </FormControl>
                 </Box>
-              </Link>
+                <Button variant='contained' color='secondary' onClick={login}>Login</Button>
+              </Box>
+              <Box display='flex' width='100%' mb={0} justifyContent='flex-end'>
+                <Link style={{ textDecoration: 'none' }} to='/register'>
+                  <Box p={2}>
+                    <Typography color='secondary' variant='caption'>Dont have an account?then register </Typography>
+                  </Box>
+                </Link>
+              </Box>
             </Box>
-          </Box>
-        </Card>
-      </Box>
-    </div>
+          </Card>
+        </Box>
+      </div>
+      {
+        user.newU && <Snackbar open={open} autoHideDuration={4000} onClose={()=>setOpen(false)}>
+          <MuiAlert elevation={6} variant="filled"  severity="info" >
+            Please login to confirm your register
+        </MuiAlert>
+        </Snackbar>
+      }
+    </Fragment>
   );
 }
 

@@ -1,10 +1,12 @@
-import React from 'react'
+import React,{useContext, useState} from 'react'
 import { Box, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { useState } from "react";
 import useStyles from './StylesLoginAndRegister';
+import axios from '../../utils';
+import {useHistory} from 'react-router-dom';
+import { userContext } from '../../contexts/UserProvider';
 
 
 const RegisterPage = () => {
@@ -13,6 +15,8 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('')
   const [showPassword, setShowPassword] = useState(false);
+  const history=useHistory();
+  const {setUser}=useContext(userContext);
 
   const changeUserInfo = (e) => {
     if (e.target.id === 'username-input')
@@ -21,6 +25,28 @@ const RegisterPage = () => {
       setPassword(e.target.value);
     if (e.target.id === 'email-input')
       setEmail(e.target.value);
+  }
+
+  const register=()=>{
+        const req=async()=>{
+            try{  
+                  await axios.post('users/register',{
+                    username:username,
+                    email:email,
+                    password:password
+                  })
+                  setUser(prev=>{
+                    return {
+                      ...prev,
+                      newU:true
+                    }
+                  })
+                  history.push('/login');
+            }catch(err){
+              console.log(err);
+            }
+        }
+        req();
   }
 
   return (
@@ -52,7 +78,7 @@ const RegisterPage = () => {
                 />
               </FormControl>
             </Box>
-            <Button variant='contained' color='secondary'>Sign up</Button>
+            <Button variant='contained' onClick={register} color='secondary'>Sign up</Button>
           </Box>
         </Card>
       </Box>
