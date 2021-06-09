@@ -1,9 +1,13 @@
 from flask import make_response
 from api.model.task import Task
+from datetime import datetime
 
 def check_task_id(Task,id):
   task=Task.query.filter_by(id=id).first()
   return task
+
+def get_all(Task,date):
+  return Task.query.filter_by(date=datetime.strptime(date,"%Y-%m-%d")).all()
 
 
 def task_find_handler(req):
