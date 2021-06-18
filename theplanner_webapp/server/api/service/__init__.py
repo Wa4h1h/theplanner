@@ -1,2 +1,2 @@
-from api.model.user import User
+from model.user import User
 

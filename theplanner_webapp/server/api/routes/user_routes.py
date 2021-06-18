@@ -1,14 +1,16 @@
+from werkzeug.wrappers import response
 from service.task_service import get_all
 from sqlalchemy.sql.elements import Null
 from routes import user_ctr
 from flask import request,make_response,jsonify
-from api.config import db,bcy
-from api.model.task import taskSchema,Task
+from config import db,bcy
+from model.task import taskSchema,Task
 from flask_jwt_extended import create_access_token
-from api.service.user_service import check_user,load_user_by_username,check_id,user_find_handler
+from flask_jwt_extended import decode_token
+from service.user_service import check_user,load_user_by_username,check_id,user_find_handler
 import json
-from api.service.auth_service import access_tk_required
-from api.routes import  User,userSchema
+from service.auth_service import access_tk_required
+from routes import  User,userSchema
 
 
 
@@ -61,7 +63,15 @@ def extract_task(user_id):
   date=request.args.get('date')
   tasks=get_all(Task,date)
   return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks])
- 
+
+
+@user_ctr.route('<user_id>/logout')
+@access_tk_required
+@user_find_handler
+def logout(user_id):
+  response=make_response()
+  response.set_cookie(key='access_token',value='')
+  return response
 
 
   

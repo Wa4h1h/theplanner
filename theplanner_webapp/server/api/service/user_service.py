@@ -1,4 +1,4 @@
-from api.service import User
+from service import User
 from sqlalchemy.sql.elements import Null
 from flask import make_response
 

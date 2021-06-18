@@ -1,14 +1,15 @@
+from service.task_service import change_task
 from flask_jwt_extended.view_decorators import jwt_required
 from marshmallow.fields import Boolean
 from sqlalchemy.sql.base import NO_ARG
-from api.model.task import Task,taskSchema
-from api.model.user import User,userSchema
+from model.task import Task,taskSchema
+from model.user import User,userSchema
 from routes import task_ctr
 from flask import request
-from api.config import db
-from api.service.user_service import check_id
-from api.service.task_service import check_task_id,task_find_handler
-from api.service.auth_service import access_tk_required
+from config import db
+from service.user_service import check_id
+from service.task_service import check_task_id,task_find_handler
+from service.auth_service import access_tk_required
 from flask import make_response
 
 
@@ -83,6 +84,18 @@ def change_task_title(task_id):
   db.session.add(task)
   db.session.commit()
   return make_response(taskSchema.dumps(task),200)
+
+@task_ctr.route('<task_id>/properties',methods=['PUT'])
+@access_tk_required
+@task_find_handler
+def change_task_properties(task_id):
+  task=db.session.merge(check_task_id(Task,task_id))
+  task_=Task(**request.get_json())
+  task=change_task(task,task_)
+  db.session.add(task)
+  db.session.commit()
+  return make_response(taskSchema.dumps(task),200)
+
 
 
 

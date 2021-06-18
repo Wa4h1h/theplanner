@@ -1,5 +1,5 @@
 from flask import Blueprint
-from api.model.user import User,userSchema
+from model.user import User,userSchema
 
 
 user_ctr=Blueprint('user_ctr',__name__)

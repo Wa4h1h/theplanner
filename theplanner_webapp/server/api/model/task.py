@@ -12,6 +12,8 @@ class Task(db.Model):
 
   def __repr__(self) :
       return 'title %s'%(self.title)
+  
+ 
 
 class TaskSchema(ma.Schema):
   class Meta:
