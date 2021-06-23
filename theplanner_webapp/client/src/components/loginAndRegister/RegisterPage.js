@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react'
+import React,{useState} from 'react'
 import { Box, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -6,7 +6,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import useStyles from './StylesLoginAndRegister';
 import axios from '../../utils';
 import {useHistory} from 'react-router-dom';
-import { userContext } from '../../contexts/UserProvider';
+
 
 
 const RegisterPage = () => {
@@ -16,7 +16,6 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('')
   const [showPassword, setShowPassword] = useState(false);
   const history=useHistory();
-  const {setUser}=useContext(userContext);
 
   const changeUserInfo = (e) => {
     if (e.target.id === 'username-input')
@@ -35,13 +34,7 @@ const RegisterPage = () => {
                     email:email,
                     password:password
                   })
-                  setUser(prev=>{
-                    return {
-                      ...prev,
-                      newU:true
-                    }
-                  })
-                  history.push('/login');
+                  history.push('/');
             }catch(err){
               console.log(err);
             }

@@ -1,4 +1,4 @@
-from service.task_service import change_task
+from service.task_service import change_task, check_task_title
 from flask_jwt_extended.view_decorators import jwt_required
 from marshmallow.fields import Boolean
 from sqlalchemy.sql.base import NO_ARG
@@ -95,6 +95,17 @@ def change_task_properties(task_id):
   db.session.add(task)
   db.session.commit()
   return make_response(taskSchema.dumps(task),200)
+
+
+@task_ctr.route('/',methods=['DELETE'])
+@access_tk_required
+def delete_task_by_title():
+  task=db.session.merge(check_task_title(Task,request.args.get('title')))
+  if task!=None:
+    db.session.delete(task)
+    db.session.commit()
+    return 'task with title %s was deleted'%(task.title),200
+  return make_response('task title was not provieded',400)
 
 
 

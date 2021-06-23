@@ -1,0 +1,41 @@
+version: "2.0"
+
+
+intents:
+  - greeting
+  - create_task
+  - set_title_task
+
+
+entities:
+  - title_task
+
+forms:
+  creating_task:
+     required_slots:
+      title:
+       - type: from_entity
+         entity: title_task
+  
+slots:
+  title: 
+    type: text
+    influence_conversation: false
+ 
+responses:
+  utter_greet:
+    - text: hi there 😀, what can i do for you?
+    - text: howdy cowboy 🤠, what can i do for you?
+    - text: hello , what can i do for you?
+  utter_create_task_begin:
+    - text: allright that i can do, but i need some infos
+  utter_ask_creating_task_title:
+    - text: can you pleave give the task title 
+  utter_task_created_complete:
+    - text: task {title} is  saved 😁
+  
+  
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

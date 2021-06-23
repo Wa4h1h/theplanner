@@ -35,7 +35,7 @@ def login():
     response=make_response({'id':user.id,'username':user.username})
     response.set_cookie(key='access_token',value=create_access_token(identity=user.username),
     httponly=True,max_age=864000);return response if check_password else make_response('false password',403)
-  return make_response('No user with username %s was found'%(json['username']))
+  return make_response('No user with username %s was found'%(json['username']), 400)
 
 @user_ctr.route('<user_id>/tasks')
 @access_tk_required

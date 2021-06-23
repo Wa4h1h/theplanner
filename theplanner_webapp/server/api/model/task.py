@@ -17,7 +17,7 @@ class Task(db.Model):
 
 class TaskSchema(ma.Schema):
   class Meta:
-    fields=('title','start_time','end_time','date','state','user_id')
+    fields=('id','title','start_time','end_time','date','state','user_id')
 
 taskSchema=TaskSchema()
 

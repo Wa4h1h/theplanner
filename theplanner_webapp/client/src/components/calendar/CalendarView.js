@@ -1,11 +1,82 @@
-import React from 'react'
+import { Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import GetDates from '../../utilities/DateUtils';
+import DayTasks from './DayTasks';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
+import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 
 function CalendarView() {
-    return (
-        <div>
-            
-        </div>
-    )
+	const [startDate, setStartDate] = useState(new Date());
+	var today = new Date();
+
+	const handlePreviousFiveDays = () => {
+		var newDate = new Date(startDate);
+		newDate.setDate(startDate.getDate() - 5);
+		setStartDate(newDate);
+	};
+
+	const handleNextFiveDays = () => {
+		var newDate = new Date(startDate);
+		newDate.setDate(startDate.getDate() + 5);
+		setStartDate(newDate);
+	};
+
+	return (
+		<Grid
+			container
+			style={{
+				borderRadius: 8,
+				width: '98%',
+				minHeight: 624,
+				height: '100%',
+				backgroundColor: '#404550',
+				marginTop: 4,
+				marginBottom: 26,
+				marginTop: 20,
+				paddingBottom: 20,
+				paddingTop: 20,
+			}}
+		>
+			<Grid item xs={0.5}>
+				<IconButton
+					disabled={
+						today.getDate() === startDate.getDate() &&
+						today.getMonth() === startDate.getMonth() &&
+						today.getFullYear() === startDate.getFullYear()
+					}
+					onClick={() => handlePreviousFiveDays()}
+				>
+					<ArrowLeftRoundedIcon
+						style={{
+							color:
+								today.getDate() === startDate.getDate() &&
+								today.getMonth() === startDate.getMonth() &&
+								today.getFullYear() === startDate.getFullYear()
+									? 'gray'
+									: 'white',
+							width: 50,
+							height: 50,
+						}}
+					/>
+				</IconButton>
+			</Grid>
+			{GetDates(startDate).map((day) => {
+				return (
+					<Grid item xs={2.2}>
+						<DayTasks day={day} />
+					</Grid>
+				);
+			})}
+			<Grid item xs={0.5}>
+				<IconButton onClick={() => handleNextFiveDays()}>
+					<ArrowRightRoundedIcon
+						style={{ color: 'white', width: 50, height: 50 }}
+					/>
+				</IconButton>
+			</Grid>
+		</Grid>
+	);
 }
 
-export default CalendarView
+export default CalendarView;

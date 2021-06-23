@@ -6,6 +6,9 @@ def check_task_id(Task,id):
   task=Task.query.filter_by(id=id).first()
   return task
 
+def check_task_title(Task,title):
+  return Task.query.filter_by(title=title).first()
+
 def get_all(Task,date):
   return Task.query.filter_by(date=datetime.strptime(date,"%Y-%m-%d")).all()
 

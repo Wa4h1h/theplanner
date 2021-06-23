@@ -1,0 +1,15 @@
+version: "2.0"
+
+rules:
+ - rule: activate create task
+   steps:
+    - intent: create_task
+    - action: utter_create_task_begin
+    - action: creating_task
+    - active_loop: creating_task
+    - active_loop: null
+    - action: utter_task_created_complete
+
+
+
+

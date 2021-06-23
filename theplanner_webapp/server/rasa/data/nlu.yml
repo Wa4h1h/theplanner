@@ -1,0 +1,55 @@
+version: "2.0"
+
+nlu:
+  - intent: greeting
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+      - good morning
+      - good evening
+      - moin
+      - hey there
+      - let's go
+      - hey dude
+      - goodmorning
+      - goodevening
+      - good afternoon
+
+  - intent: create_task
+    examples: |
+      - i want to add a task 
+      - i have to plan a task 
+      - planning a task
+      - i have a task 
+      - i wich to add a task 
+      - i need to add a task 
+      - i need your help for planning a task 
+      - i need to plan an urgent task 
+
+  - regex: title_task
+    examples: |
+      - \d{6}
+
+  - intent: set_title_task
+    examples: |
+      - [123456](title_task)
+      - set the title to [111111](title_task), thank you
+      - set please title to: [111111](title_task)
+      - title: [111111](title_task)
+  
+ 
+
+
+  
+  
+
+  
+  
+
+
+  
+
+
+

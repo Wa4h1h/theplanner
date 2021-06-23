@@ -8,15 +8,15 @@ const useStyles = makeStyles(({
     backgroundColor: '#132C33'
   },
   card: {
-    width: '40%',
-    height: '60%'
+    width: '25%',
+    height: '49%'
   },
   icon: {
     width: '15%',
     height: '15%'
   },
   input: {
-    width: '35ch',
+    width: '100%',
     height: '8ch'
   },
   head: {
