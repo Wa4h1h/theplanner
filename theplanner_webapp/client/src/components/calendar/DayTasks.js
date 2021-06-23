@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TaskCard from './TaskCard';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AddOrChangeTaskDialog from './AddOrChangeTaskDialog';
 import { DayAsString } from '../../utilities/DateUtils';
 import axios from '../../utils';
+import useFetch from '../../hooks/useFetch';
 
 function DayTasks(props) {
 	const day = props.day;
@@ -16,10 +17,12 @@ function DayTasks(props) {
 		(day.getMonth() > 8 ? day.getMonth() + 1 : '0' + (day.getMonth() + 1)) +
 		'-' +
 		(day.getDate() > 9 ? day.getDate() : '0' + day.getDate());
-	const [tasks, setTasks] = useState([]);
-	var endpoint = `users/${localStorage.getItem(
-		'userId'
-	)}/extraction?date=${dayconv}`;
+		let endpoint = `users/${localStorage.getItem(
+			'userId'
+		)}/extraction?date=${dayconv}`;
+	const {data:tasks,setData:setTasks}=useFetch(endpoint)
+
+	
 
 	const reload = async () => {
 		try {
@@ -29,18 +32,6 @@ function DayTasks(props) {
 			console.log(err);
 		}
 	};
-
-	useEffect(() => {
-		const fetch = async () => {
-			try {
-				const res = await axios.get(endpoint);
-				setTasks(res.data.tasks);
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		fetch();
-	}, [endpoint]);
 
 	const [count, setCount] = useState(0);
 

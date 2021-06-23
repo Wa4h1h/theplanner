@@ -6,6 +6,7 @@ import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
 import ArrowLeftRoundedIcon from '@material-ui/icons/ArrowLeftRounded';
 import axios from '../../utils';
 import AddOrChangeTaskDialog from './AddOrChangeTaskDialog';
+import useFetch from '../../hooks/useFetch';
 
 function TodaysPlanView() {
 	const [count, setCount] = useState(0);
@@ -18,10 +19,12 @@ function TodaysPlanView() {
 			: '0' + (today.getMonth() + 1)) +
 		'-' +
 		(today.getDate() > 9 ? today.getDate() : '0' + today.getDate());
-	var endpoint = `users/${localStorage.getItem(
+	let endpoint = `users/${localStorage.getItem(
 		'userId'
 	)}/extraction?date=${todayconv}`;
-	const [tasks, setTasks] = useState([]);
+	
+	const {data:tasks,setData:setTasks}=useFetch(endpoint)
+	
 
 	const reload = async () => {
 		try {
@@ -31,18 +34,6 @@ function TodaysPlanView() {
 			console.log(err);
 		}
 	};
-
-	useEffect(() => {
-		const fetch = async () => {
-			try {
-				const res = await axios.get(endpoint);
-				setTasks(res.data.tasks);
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		fetch();
-	}, [endpoint]);
 
 	return (
 		<Grid container 
