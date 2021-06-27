@@ -34,10 +34,10 @@ nlu:
 
   - intent: set_title_task
     examples: |
-      - [123456](title_task)
-      - set the title to [111111](title_task), thank you
-      - set please title to: [111111](title_task)
-      - title: [111111](title_task)
+      - [111111](title_task)
+      - set the title to [222222](title_task), thank you
+      - set please title to: [333333](title_task)
+      - title: [444444](title_task)
   
  
 
