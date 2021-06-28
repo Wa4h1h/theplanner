@@ -4,6 +4,6 @@ stories:
   - story: greet each other
     steps: 
       - intent: greeting
-      - action: utter_greet
+      #- action: utter_greet
       
 
