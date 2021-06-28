@@ -3,10 +3,13 @@ version: "2.0"
 intents:
   - greeting
   - create_task
-  - set_date_task
+  - set_task_date
+  - set_task_duration
+  - set_task_start_time
 
 entities:
   - time
+  - number_time
 
 forms:
   creating_task:
@@ -16,6 +19,12 @@ forms:
       time:
         - type: from_entity
           entity: time
+      duration :
+        - type: from_entity
+          entity: number_time  
+      start_time :
+        - type: from_entity
+          entity: number_time      
 
 slots:
   title:
@@ -24,6 +33,12 @@ slots:
   time:
     type: any
     influence_conversation: false
+  duration:
+    type: any
+    influence_conversation: false  
+  start_time:
+    type: any
+    influence_conversation: false   
 
 responses:
   utter_greet:
@@ -38,9 +53,18 @@ responses:
   utter_ask_creating_task_title:
     - text: can you pleave give the task title
   utter_ask_creating_task_time:
-  - text: can you please give the task date and the time!!
- # utter_task_created_complete:
-  #- text: task {title} is  saved in the date {date} at {time} 😁
+  - text: can you please give the task date !!
+  utter_ask_creating_task_start_time:
+  - text: can you please give the task start time (from 0 to 23)!
+  utter_ask_creating_task_duration:
+  - text: can you please give the task duration (in hours)!
+  utter_task_created_complete:
+  - custom: 
+      text: "task {title} is saved at {time} 😁"
+      title: "{title}"
+      date: "{time}"
+      duration: "{duration}"
+      start_time: "{start_time}"
 
 actions:
  - save_task_form

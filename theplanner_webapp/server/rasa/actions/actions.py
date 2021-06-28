@@ -21,14 +21,9 @@ class save_task_form(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-       # title_task=tracker.get_slot("title")
-       # date_time=tracker.get_slot("time")
-        #date_extracted=date_time[0:10]
-        #time_from=date_time[11:13]
-        #obj={'title':title_task,
-        #'start_time':time_from,
-        #'end_time':time_from,
-        #'date':date_extracted}
-
-        #dispatcher.utter_message(json_message = obj)
-        #return []
+            title=tracker.get_slot("title")
+            time=tracker.get_slot("time")
+            duration=tracker.get_slot("duration")
+            start_time=tracker.get_slot("start_time")
+            dispatcher.utter_message(template="utter_task_created_complete", title=title, date=time, start_time=start_time, duration=duration)
+            return []
