@@ -28,9 +28,25 @@ nlu:
       - i need your help for planning a task 
       - i need to plan an urgent task 
 
+  - regex: number_time
+    examples: |
+      - \d{1,2}
 
+  - intent: set_task_duration
+    examples: |
+      - [1](number_time) 
+      - [2](number_time) hours
+      - [10](number_time)
+      - [13](number_time) hours
 
-  - intent: set_date_task
+  - intent: set_task_start_time
+    examples: |
+      - at [1](number_time)
+      - at [10](number_time)  
+      - [3](number_time)
+      - [21](number_time) 
+
+  - intent: set_task_date
     examples: |
       - added it today
       - added it tommorow

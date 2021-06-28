@@ -8,7 +8,7 @@ rules:
     - action: creating_task
     - active_loop: creating_task
     - active_loop: null
-    #- action: utter_task_created_complete
+    - action: utter_task_created_complete
 
 
 
