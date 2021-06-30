@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { Box, Button, Divider, Grid, TextField } from '@material-ui/core';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -13,6 +13,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import axios from '../../utils';
 import MuiAlert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import { ReloadContext } from '../../contexts/ReloadContext';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -38,6 +39,7 @@ export default function AddOrChangeTaskDialog(props) {
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState(false);
 	const [errorMsg, setErrorMsg] = useState(null);
+	const { reload, setReload } = useContext(ReloadContext);
 
 	const handleSubmitForm = () => {
 		const sendReq = async () => {
@@ -47,6 +49,7 @@ export default function AddOrChangeTaskDialog(props) {
 					end_time: end_time,
 					start_time: start_time,
 					title: title,
+					state: props.task ? props.task.state : false,
 				};
 				console.log(task);
 				if (props.function === 'add') {
@@ -55,14 +58,12 @@ export default function AddOrChangeTaskDialog(props) {
 						task
 					);
 				} else {
-					await axios.put(
-						`tasks/${props.task.id}/properties`,
-						task
-					);
+					await axios.put(`tasks/${props.task.id}/properties`, task);
 				}
 				setSuccess(true);
 				setOpen(false);
 				props.reload();
+				setReload(!reload);
 			} catch (err) {
 				console.log(err);
 			}
@@ -140,13 +141,23 @@ export default function AddOrChangeTaskDialog(props) {
 				</IconButton>
 			)}
 			{props.function === 'add' && (
-				<Box display="flex" justifyContent={props.taskslength === 0 ? "center" : "right"} width="100%">
+				<Box
+					display="flex"
+					justifyContent={props.taskslength === 0 ? 'center' : 'right'}
+					width="100%"
+				>
 					<IconButton
 						onClick={() => {
 							handleClickOpen();
 						}}
 					>
-						<AddRoundedIcon style={{ width:props.taskslength === 0 ? 70 : 30 , height:props.taskslength === 0 ? 70 : 30, color: '#51C4D3' }} />
+						<AddRoundedIcon
+							style={{
+								width: props.taskslength === 0 ? 70 : 30,
+								height: props.taskslength === 0 ? 70 : 30,
+								color: '#51C4D3',
+							}}
+						/>
 					</IconButton>
 				</Box>
 			)}
@@ -249,7 +260,9 @@ export default function AddOrChangeTaskDialog(props) {
 				onClose={handleCloseAlertSuccess}
 			>
 				<Alert onClose={handleCloseAlertSuccess} severity="success">
-					{props.function === 'add' ? "Task successfully added" : "Task successfully changed"}
+					{props.function === 'add'
+						? 'Task successfully added'
+						: 'Task successfully changed'}
 				</Alert>
 			</Snackbar>
 		</React.Fragment>

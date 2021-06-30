@@ -24,8 +24,7 @@ const LoginPage = () => {
 	const [password_, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
 	const history = useHistory();
-	const {setLoggedIn}=useContext(AuthStateContext)
-
+	const { setLoggedIn } = useContext(AuthStateContext);
 
 	const changeUserInfo = (e) => {
 		if (e.target.id === 'username-input') setUsername(e.target.value);
@@ -39,8 +38,8 @@ const LoginPage = () => {
 					username: username_,
 					password: password_,
 				});
-				localStorage.setItem('userId', res.data.id)
-				setLoggedIn(1)
+				localStorage.setItem('userId', res.data.id);
+				setLoggedIn(1);
 			} catch (err) {
 				console.log(err);
 			}
@@ -81,7 +80,7 @@ const LoginPage = () => {
 									Login with your username and password
 								</Typography>
 								<Box
-									mt={10}
+									mt={4}
 									display="flex"
 									flexDirection="column"
 									justifyContent="space-between"

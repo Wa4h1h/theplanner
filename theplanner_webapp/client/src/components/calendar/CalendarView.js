@@ -27,13 +27,12 @@ function CalendarView() {
 			container
 			style={{
 				borderRadius: 8,
-				width: '98%',
-				minHeight: 624,
+				width: '100%',
+				minHeight: 600,
 				height: '100%',
 				backgroundColor: '#404550',
-				marginTop: 4,
-				marginBottom: 26,
-				marginTop: 20,
+				marginBottom: 20,
+				marginTop: 30,
 				paddingBottom: 20,
 				paddingTop: 20,
 			}}

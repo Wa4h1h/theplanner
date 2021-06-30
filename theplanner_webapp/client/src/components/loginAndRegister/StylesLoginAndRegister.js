@@ -12,6 +12,7 @@ const useStyles = makeStyles(({
     height: '49%'
   },
   icon: {
+    marginTop: '5%',
     width: '15%',
     height: '15%'
   },
@@ -20,6 +21,7 @@ const useStyles = makeStyles(({
     height: '8ch'
   },
   head: {
+    marginBottom: '5%',
     marginTop: '5%',
     fontWeight:'bold'
   }

@@ -9,8 +9,9 @@
 
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
+from rasa_sdk.events import EventType
 from rasa_sdk.executor import CollectingDispatcher
-
+from rasa_sdk.events import AllSlotsReset
 
 class save_task_form(Action):
 
@@ -23,7 +24,17 @@ class save_task_form(Action):
 
             title=tracker.get_slot("title")
             time=tracker.get_slot("time")
+            date=time[0:10]
             duration=tracker.get_slot("duration")
             start_time=tracker.get_slot("start_time")
-            dispatcher.utter_message(template="utter_task_created_complete", title=title, date=time, start_time=start_time, duration=duration)
+            dispatcher.utter_message(template="utter_task_created_complete", title=title, date=date, start_time=start_time, duration=duration)
             return []
+
+class ResetSlots(Action):
+    def name(self) -> Text:
+        return "action_reset_all_slots"
+
+    def run(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> List[EventType]:
+        return[AllSlotsReset()]

@@ -5,11 +5,20 @@ rules:
   steps:
     - intent: create_task
     - action: utter_create_task_begin
+    - action: action_reset_all_slots
     - action: creating_task
     - active_loop: creating_task
     - active_loop: null
     - action: utter_task_created_complete
+    - action: utter_something_else
 
+- rule: affirm something else
+  steps:
+    - intent: affirm
+    - action: utter_ask_for_task
 
-
-
+- rule: deny something else
+  steps:
+    - intent: deny
+    - action: utter_accept_deny
+    - action: utter_goodbye

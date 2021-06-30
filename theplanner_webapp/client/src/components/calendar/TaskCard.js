@@ -4,33 +4,49 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Typography } from '@material-ui/core';
 import AddOrChangeTaskDialog from './AddOrChangeTaskDialog';
 import DeleteTaskDialog from './DeleteTaskDialog';
+import axios from '../../utils';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = makeStyles((theme) => ({
 	todaysPlanStyle: {
-		
 		height: 110,
 		marginRight: 10,
 		marginLeft: 10,
 		backgroundColor: '#E3CDC1',
-		borderRadius: 8,
+		borderRadius: 10,
 		paddingTop: 10,
-		paddingRight: 15,
+		paddingRight: 10,
 		paddingLeft: 10,
-		paddingBottom: 10,
 	},
 	calendarStyle: {
-		width: 261,
+		width: '100%',
 		marginTop: 20,
 		backgroundColor: '#E3CDC1',
-		borderRadius: 8,
+		borderRadius: 10,
 		paddingTop: 10,
-		paddingRight: 15,
+		paddingRight: 10,
 		paddingLeft: 10,
 	},
 }));
 
 function TaskCard(props) {
 	const classes = useStyles();
+	const [checked, setChecked] = React.useState(props.task.state);
+	const [isLoading, setIsLoading] = React.useState(false);
+
+	const handleChange = async (event) => {
+		setIsLoading(true);
+		var task = Object.assign(props.task);
+		task.state = event.target.checked;
+		try {
+			await axios.put(`tasks/${props.task.id}/complete`);
+			setChecked(true);
+			setIsLoading(false);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	return (
 		<div
@@ -48,7 +64,13 @@ function TaskCard(props) {
 					{props.task.start_time}H - {props.task.end_time}H
 				</Typography>
 			</div>
-			<Checkbox />
+			{checked === true ? (
+				<DoneIcon style={{marginTop: 10}}/>
+			) : isLoading === true ? (
+				<CircularProgress />
+			) : (
+				<Checkbox checked={checked} onChange={handleChange} />
+			)}
 			<div style={{ float: 'right' }}>
 				<AddOrChangeTaskDialog
 					function="edit"

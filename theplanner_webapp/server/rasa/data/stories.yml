@@ -1,9 +1,33 @@
-version: "2.0"
+version: '2.0'
 
 stories:
-  - story: greet each other
-    steps: 
+  - story: create task sucessfull
+    steps:
       - intent: greeting
       - action: utter_greet
-      
-
+      - intent: create_task
+      - action: utter_create_task_begin 
+      - action: action_reset_all_slots
+      - action: creating_task
+      - active_loop: creating_task
+      - slot_was_set:
+        - requested_slot: title
+      - slot_was_set:
+        - title: 'sport'
+      - slot_was_set:
+        - requested_slot: time
+      - slot_was_set:
+        - time: 'tommorow'
+      - slot_was_set:
+        - requested_slot: start_time
+      - slot_was_set:
+        - start_time: '11'
+      - slot_was_set:
+        - requested_slot: duration
+      - slot_was_set:
+        - duration: '2'   
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null
+      - action: utter_task_created_complete
+      - action: utter_something_else
