@@ -1,13 +1,21 @@
-import React , {useState, useEffect} from 'react';
-import MicRoundedIcon from '@material-ui/icons/MicRounded';
+import React, { useState, useEffect, useRef, useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Popover from '@material-ui/core/Popover';
-import { IconButton } from '@material-ui/core';
+import { Grid, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import TextField from '@material-ui/core/TextField';
 import SpeechRecognition, {
 	useSpeechRecognition,
 } from 'react-speech-recognition';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SendIcon from '@material-ui/icons/Send';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import axios from '../utils';
+import { ReloadContext } from '../contexts/ReloadContext';
+const loadImage = require.context('../img', true);
 
 const useStyles = makeStyles((theme) => ({
 	fab: {
@@ -23,10 +31,22 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	icon: {
-		width: 40,
-		height: 40,
+		width: 60,
+		height: 80,
 	},
-	conversation: {},
+	humanBubble: {
+		borderRadius: '48px 48px 8px 48px',
+		padding: 16,
+		backgroundColor: '#D5DEDE',
+		color: 'black',
+	},
+	botBubble: {
+		borderRadius: '48px 48px 48px 8px',
+		padding: 16,
+		paddingBottom: '16px',
+		backgroundColor: '#132C33',
+		color: 'white',
+	},
 }));
 
 const VoiceAssistant = () => {
@@ -45,32 +65,27 @@ const VoiceAssistant = () => {
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
 
-	const [message, setMessage] = useState('');
-	const commands = [
-		{
-			command: 'reset',
-			callback: () => resetTranscript(),
-		},
-		{
-			command: 'shut up',
-			callback: () => setMessage("I wasn't talking."),
-		},
-		{
-			command: 'Hello',
-			callback: () => setMessage('Hi there!'),
-		},
-        {
-            command: 'I would like to order *',
-            callback: (food) => setMessage(`Your order is for: ${food}`)
-          }
-	];
+	const [history, setHistory] = React.useState([]);
+	const { reload, setReload } = useContext(ReloadContext);
+	const textfield_ref = useRef();
+
+	useEffect(() => {
+		if (textfield_ref.current) {
+			textfield_ref.current.scrollIntoView({ behavior: 'smooth' });
+		}
+	});
+
+	// loading indicator state
+	const [isLoading, setIsLoading] = React.useState(false);
+
 	const {
 		transcript,
 		interimTranscript,
 		finalTranscript,
 		resetTranscript,
 		listening,
-	} = useSpeechRecognition({ commands });
+	} = useSpeechRecognition();
+
 	useEffect(() => {
 		if (finalTranscript !== '') {
 			console.log('Got final result:', finalTranscript);
@@ -91,10 +106,114 @@ const VoiceAssistant = () => {
 		});
 	};
 
+	const chat = () => {
+		setHistory((history) => [
+			...history,
+			{ sender: localStorage.getItem('userId'), msg: transcript },
+		]);
+		sendToRasa({ sender: localStorage.getItem('userId'), message: transcript });
+		SpeechRecognition.stopListening();
+		resetTranscript();
+	};
+
+	const handleSend = (event) => {
+		chat();
+	};
+
+	const sendToRasa = (data) => {
+		setIsLoading(true);
+
+		fetch('http://localhost:5005/webhooks/rest/webhook', {
+			method: 'post',
+			body: JSON.stringify(data),
+		})
+			.then(function (response) {
+				console.log(response);
+				return response.json();
+			})
+			.then(function (data) {
+				let botMessages = data.map((response) => {
+					if (response.custom) {
+						let obj = response.custom;
+						var task = {
+							date: obj.date.slice(0, 10),
+							end_time: parseInt(obj.start_time) + parseInt(obj.duration),
+							start_time: parseInt(obj.start_time),
+							title: obj.title,
+							state: false,
+						};
+						try {
+							axios
+								.post(`tasks/?user=${localStorage.getItem('userId')}`, task)
+								.then((res) => {
+									console.log(res);
+									setReload(!reload)
+								});
+						} catch (err) {
+							console.log(err);
+						}
+						return { sender: -1, msg: response.custom.text };
+					} else {
+						return { sender: -1, msg: response.text };
+					}
+				});
+				setTimeout(() => {
+					setIsLoading(false);
+					setHistory((history) => [...history, ...botMessages]);
+				}, 1000);
+			})
+			.catch((err) => console.log(err));
+	};
+
+	const chatHistory = history.map((chat, i) => {
+		return (
+			<Grid
+				key={i}
+				container
+				item
+				direction="column"
+				alignItems={chat.sender > 0 ? 'flex-end' : 'flex-start'}
+			>
+				<Grid item xs={6}>
+					<div
+						className={
+							chat.sender > 0 ? classes.humanBubble : classes.botBubble
+						}
+					>
+						{chat.msg}
+					</div>
+				</Grid>
+			</Grid>
+		);
+	});
+
+	let messages = (
+		<Grid item>
+			<Card>
+				<CardContent>There is no conversation yet!</CardContent>
+			</Card>
+		</Grid>
+	);
+
+	if (chatHistory.length > 0) {
+		messages = chatHistory;
+	}
+
+	let loadingIndicator = null;
+	if (isLoading) {
+		loadingIndicator = (
+			<Grid container item justify="flex-start">
+				<Grid item xs={2}>
+					<CircularProgress />
+				</Grid>
+			</Grid>
+		);
+	}
+
 	return (
 		<React.Fragment>
 			<Fab onClick={handleClick} className={classes.fab} color="#132C33">
-				<MicRoundedIcon className={classes.icon} />
+				<img className={classes.icon} src={loadImage('./voice.svg').default} />
 			</Fab>
 			<Popover
 				id={id}
@@ -113,47 +232,113 @@ const VoiceAssistant = () => {
 			>
 				<div
 					style={{
-						width: 400,
-						height: 240,
+						width: 500,
+						height: '100%',
+						maxHeight: 600,
+						overflowY: 'scroll',
+						overflowX: 'hidden',
 					}}
 				>
 					<IconButton
 						style={{
 							position: 'relative',
 							float: 'right',
-							top: -7,
-							right: -7,
-							color: '#a30000',
+							color: '#132C33',
 						}}
+						onClick={handleClose}
 					>
 						<CloseIcon />
 					</IconButton>
 					<div
 						style={{
 							overflow: 'visible',
-							width: 400,
-							height: 240,
+							width: 500,
+							height: '100%',
+							padding: 20,
 							backgroundColor: '#DFF7FF',
 						}}
 					>
-						<div>
-							<span>listening: {listening ? 'on' : 'off'}</span>
-							<div>
-								<button type="button" onClick={resetTranscript}>
-									Reset
-								</button>
-								<button type="button" onClick={listenContinuously}>
-									Listen
-								</button>
-								<button type="button" onClick={SpeechRecognition.stopListening}>
-									Stop
-								</button>
-							</div>
-						</div>
-						<div>{message}</div>
-						<div>
-							<span>{transcript}</span>
-						</div>
+						<Grid container direction="column" spacing={1}>
+							{messages}
+							{loadingIndicator}
+						</Grid>
+						<Grid container spacing={1}>
+							<Grid item ref={textfield_ref} xs={8}>
+								<TextField
+									id="User_message"
+									label="Your message"
+									multiline
+									rowsMax={4}
+									value={transcript}
+									InputProps={{
+										readOnly: true,
+										startAdornment: (
+											<InputAdornment position="start">
+												<IconButton
+													style={{ width: 25, height: 25, color: '#132C33' }}
+													onClick={resetTranscript}
+												>
+													<CloseIcon />
+												</IconButton>
+											</InputAdornment>
+										),
+									}}
+									style={{ width: '100%', height: '100%', marginTop: 20 }}
+									variant="outlined"
+									size="small"
+								/>
+							</Grid>
+							<Grid item xs={2}>
+								<Fab
+									variant="extended"
+									style={{
+										position: 'absolute',
+										bottom: 22,
+										right: 68,
+										height: 40,
+										color: '#132C33',
+										backgroundColor: '#DDFCF8',
+										'&:hover': {
+											backgroundColor: '#62F9E6',
+										},
+									}}
+									onClick={handleSend}
+								>
+									<SendIcon style={{ marginRight: 5, width: 25, height: 25 }} />
+									Send
+								</Fab>
+							</Grid>
+							<Grid item xs={2}>
+								<Fab
+									style={{
+										position: 'absolute',
+										bottom: 22,
+										right: 20,
+										width: 40,
+										height: 40,
+										color: '#132C33',
+										backgroundColor: listening ? '#FF616D' : '#DDFCF8',
+										'&:hover': {
+											backgroundColor: '#62F9E6',
+										},
+									}}
+									onClick={
+										listening
+											? SpeechRecognition.stopListening
+											: listenContinuously
+									}
+								>
+									<img
+										style={{ width: 25, height: 25, color: '#132C33' }}
+										src={
+											listening
+												? loadImage('./stop.svg').default
+												: loadImage('./start.svg').default
+										}
+									/>
+								</Fab>
+							</Grid>
+						</Grid>
 					</div>
 				</div>
 			</Popover>

@@ -1,7 +1,10 @@
-version: "2.0"
+version: '2.0'
 
 intents:
   - greeting
+  - goodbye
+  - affirm
+  - deny
   - create_task
   - set_task_date
   - set_task_duration
@@ -19,12 +22,12 @@ forms:
       time:
         - type: from_entity
           entity: time
-      duration :
+      start_time:
         - type: from_entity
-          entity: number_time  
-      start_time :
+          entity: number_time
+      duration:
         - type: from_entity
-          entity: number_time      
+          entity: number_time
 
 slots:
   title:
@@ -33,41 +36,59 @@ slots:
   time:
     type: any
     influence_conversation: false
-  duration:
-    type: any
-    influence_conversation: false  
   start_time:
     type: any
-    influence_conversation: false   
+    influence_conversation: false
+  duration:
+    type: any
+    influence_conversation: false
 
 responses:
   utter_greet:
-    - text: hi there 😀, what can i do for you?
-    - text: howdy cowboy 🤠, what can i do for you?
-    - text: hello , what can i do for you?
+    - text: Hi there 😀, what can i do for you?
+    - text: Howdy cowboy 🤠, what can i do for you?
+    - text: Hey, what can i do for you?
 
+  utter_ask_for_task:
+    - text: So what can i do for you?
+    - text: Okay then, what can i do for you more?
+    - text: Alright, how can i help you? 
+
+  utter_goodbye:
+    - text: "Bye!"
+    - text: "See you next time!"
+    - text: "Enjoy and cu"
+    - text: "cya next time"  
+
+  utter_accept_deny:
+    - text: "Alright then"
+
+  utter_something_else: 
+    - text: "Something else?"
+   
   utter_ask_date:
-    - text: when and what time ?
+    - text: When and what time ?
   utter_create_task_begin:
-    - text: allright that i can do, but i need some infos
+    - text: 'Allright that i can do, but i need some infos:'
   utter_ask_creating_task_title:
-    - text: can you pleave give the task title
+    - text: Can you pleave give the task title?
   utter_ask_creating_task_time:
-  - text: can you please give the task date !!
+    - text: Can you please give the task date?
   utter_ask_creating_task_start_time:
-  - text: can you please give the task start time (from 0 to 23)!
+    - text: Can you please give the task start time (from 0 to 23)?
   utter_ask_creating_task_duration:
-  - text: can you please give the task duration (in hours)!
+    - text: Can you please give the task duration(in hours)?
   utter_task_created_complete:
-  - custom: 
-      text: "task {title} is saved at {time} 😁"
-      title: "{title}"
-      date: "{time}"
-      duration: "{duration}"
-      start_time: "{start_time}"
+    - custom:
+        text: 'Task {title} is saved on {time} 😁'
+        title: '{title}'
+        date: '{time}'
+        start_time: '{start_time}'
+        duration: '{duration}'
 
 actions:
- - save_task_form
+  - save_task_form
+  - action_reset_all_slots
 
 session_config:
   session_expiration_time: 60

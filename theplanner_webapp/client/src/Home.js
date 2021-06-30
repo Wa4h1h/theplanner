@@ -4,25 +4,19 @@ import CalendarView from './components/calendar/CalendarView';
 import Navbar from './components/Navbar';
 import VoiceAssistant from './components/VoiceAssistant';
 import Settings from './components/Settings';
-import WeatherView from './components/weather/WeatherView';
-import Grid from '@material-ui/core/Grid';
+import ReloadState from './contexts/ReloadContext';
 
 function HomePage() {
 	return (
 		<div style={{ backgroundColor: '#303841', maxHeight: '100%' }}>
 			<Navbar />
-			<Grid container spacing={0}>
-				<Grid item xs={2}>
-					<WeatherView />
-				</Grid>
-				<Grid item xs={10}>
-					<div>
-						<TodaysPlanView />
-						<CalendarView />
-					</div>
-				</Grid>
-			</Grid>
-			<VoiceAssistant />
+			<ReloadState>
+				<div style={{ paddingRight: 48, paddingLeft: 48, paddingBottom: 20 }}>
+					<TodaysPlanView />
+					<CalendarView />
+				</div>
+				<VoiceAssistant />
+			</ReloadState>
 			<Settings />
 		</div>
 	);
