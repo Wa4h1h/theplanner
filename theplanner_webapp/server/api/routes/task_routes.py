@@ -15,7 +15,7 @@ from flask import make_response
 
 
 @task_ctr.route('/',methods=['POST'])
-#@access_tk_required
+@access_tk_required
 def create_task():
   user_id=request.args.get('user')
   user_=check_id(User,user_id)
