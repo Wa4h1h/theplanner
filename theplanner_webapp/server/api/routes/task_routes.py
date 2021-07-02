@@ -112,7 +112,7 @@ def delete_task_by_title():
   return make_response('task title was not provieded',400)
 
 
-@task_ctr.route('/title',methods=['POST'])
+@task_ctr.route('/title',methods=['GET'])
 @access_tk_required
 def get_task_title_and_date(title):
   date=request.args.get('date')
