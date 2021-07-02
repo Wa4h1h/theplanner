@@ -10,7 +10,7 @@ def check_task_title(Task,title):
   return Task.query.filter_by(title=title).first()
 
 def get_all(Task,date):
-  return Task.query.filter_by(date=datetime.strptime(date,"%Y-%m-%d")).all()
+  return Task.query.filter_by(date=datetime.strptime(date,"%Y-%m-%d").date()).all()
 
 
 def task_find_handler(req):

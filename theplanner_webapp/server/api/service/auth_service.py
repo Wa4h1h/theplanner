@@ -5,8 +5,6 @@ from flask_jwt_extended import decode_token
 from model.user import User
 
 
-
-
 def access_tk_required(req):
   def auth_deco(**kwargs):
     token=request.cookies.get('access_token')

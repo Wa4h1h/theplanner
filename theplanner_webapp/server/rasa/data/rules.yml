@@ -1,7 +1,12 @@
 version: "2.0"
 
 rules:
-- rule: activate create task
+- rule: Say hi anytime the user says hi
+  steps:
+    - intent: greeting
+    - action: utter_greet
+
+- rule: activate create task form
   steps:
     - intent: create_task
     - action: utter_create_task_begin
@@ -9,7 +14,17 @@ rules:
     - action: creating_task
     - active_loop: creating_task
     - active_loop: null
-    - action: utter_task_created_complete
+    - action: action_save_task
+    - action: utter_something_else
+
+- rule: activate search by date form
+  steps:
+    - intent: search_task_by_date
+    - action: action_reset_all_slots
+    - action: searching_task_by_date
+    - active_loop: searching_task_by_date
+    - active_loop: null
+    - action: action_search_tasks_by_date
     - action: utter_something_else
 
 - rule: affirm something else
@@ -23,12 +38,27 @@ rules:
     - action: utter_accept_deny
     - action: utter_goodbye
 
-- rule: activate delete task
+- rule: choose search type
+  steps: 
+    - intent: search_task
+    - action: utter_ask_search_type
+
+- rule: activate search by title form
   steps:
-    - intent: delete_task
+    - intent: search_task_by_title
     - action: action_reset_all_slots
-    - action: deleting_task
-    - active_loop: deleting_task 
+    - action: searching_task_by_title
+    - active_loop: searching_task_by_title 
     - active_loop: null 
-    - action: utter_task_deleted_complete 
+    - action: action_search_tasks_by_title
     - action: utter_something_else
+
+- rule: activate search by title and date form
+  steps:
+    - intent: search_task_by_title_and_date
+    - action: action_reset_all_slots
+    - action: searching_task_by_title_and_date
+    - active_loop: searching_task_by_title_and_date 
+    - active_loop: null 
+    - action: action_search_tasks_by_title_and_date 
+    - action: utter_something_else    

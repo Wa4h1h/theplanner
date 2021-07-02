@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext} from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Popover from '@material-ui/core/Popover';
@@ -89,6 +89,7 @@ const VoiceAssistant = () => {
 	useEffect(() => {
 		if (finalTranscript !== '') {
 			console.log('Got final result:', finalTranscript);
+			handleSend();
 		}
 	}, [interimTranscript, finalTranscript]);
 	if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
@@ -101,7 +102,6 @@ const VoiceAssistant = () => {
 	}
 	const listenContinuously = () => {
 		SpeechRecognition.startListening({
-			continuous: true,
 			language: 'en-GB',
 		});
 	};
@@ -135,22 +135,27 @@ const VoiceAssistant = () => {
 				let botMessages = data.map((response) => {
 					if (response.custom) {
 						let obj = response.custom;
-						var task = {
-							date: obj.date.slice(0, 10),
-							end_time: parseInt(obj.start_time) + parseInt(obj.duration),
-							start_time: parseInt(obj.start_time),
-							title: obj.title,
-							state: false,
-						};
-						try {
-							axios
-								.post(`tasks/?user=${localStorage.getItem('userId')}`, task)
-								.then((res) => {
-									console.log(res);
-									setReload(!reload)
-								});
-						} catch (err) {
-							console.log(err);
+						if (obj.save_task) {
+							var task = {
+								date: obj.save_task.date.slice(0, 10),
+								end_time:
+									parseInt(obj.save_task.start_time) +
+									parseInt(obj.save_task.duration),
+								start_time: parseInt(obj.save_task.start_time),
+								title: obj.save_task.title,
+								state: false,
+							};
+							try {
+								axios
+									.post(`tasks/?user=${localStorage.getItem('userId')}`, task)
+									.then((res) => {
+										console.log(res);
+										setReload(!reload);
+									});
+							} catch (err) {
+								console.log(err);
+							}
+						} else if (obj.search_tasks_by_date) {
 						}
 						return { sender: -1, msg: response.custom.text };
 					} else {
@@ -181,6 +186,7 @@ const VoiceAssistant = () => {
 						}
 					>
 						{chat.msg}
+						{chat.sender < 0 && ' speech'}
 					</div>
 				</Grid>
 			</Grid>
@@ -263,7 +269,7 @@ const VoiceAssistant = () => {
 							{loadingIndicator}
 						</Grid>
 						<Grid container spacing={1}>
-							<Grid item ref={textfield_ref} xs={8}>
+							<Grid item ref={textfield_ref} xs={10}>
 								<TextField
 									id="User_message"
 									label="Your message"
@@ -290,30 +296,10 @@ const VoiceAssistant = () => {
 							</Grid>
 							<Grid item xs={2}>
 								<Fab
-									variant="extended"
 									style={{
 										position: 'absolute',
 										bottom: 22,
-										right: 68,
-										height: 40,
-										color: '#132C33',
-										backgroundColor: '#DDFCF8',
-										'&:hover': {
-											backgroundColor: '#62F9E6',
-										},
-									}}
-									onClick={handleSend}
-								>
-									<SendIcon style={{ marginRight: 5, width: 25, height: 25 }} />
-									Send
-								</Fab>
-							</Grid>
-							<Grid item xs={2}>
-								<Fab
-									style={{
-										position: 'absolute',
-										bottom: 22,
-										right: 20,
+										right: 35,
 										width: 40,
 										height: 40,
 										color: '#132C33',
