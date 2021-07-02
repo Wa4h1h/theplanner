@@ -29,5 +29,5 @@ stories:
       - slot_was_set:
         - requested_slot: null
       - active_loop: null
-      - action: utter_task_created_complete
+      - action: action_save_task
       - action: utter_something_else

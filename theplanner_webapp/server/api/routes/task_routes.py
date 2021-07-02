@@ -15,6 +15,7 @@ from flask import make_response
 from flask_jwt_extended import decode_token
 from service.user_service import load_user_by_username
 import json
+from datetime import datetime
 
 
 
@@ -27,6 +28,7 @@ def create_task():
     json_=request.get_json()
     user__=db.session.merge(user_)
     task=Task(**json_,user=user__)
+    task.date=datetime.strptime(task.date,"%Y-%m-%d")
     db.session.add(task)
     db.session.commit()
     return taskSchema.dumps(task)
@@ -96,6 +98,7 @@ def change_task_properties(task_id):
   task=db.session.merge(check_task_id(Task,task_id))
   task_=Task(**request.get_json())
   task=change_task(task,task_)
+  task.date=datetime.strptime(task.date,"%Y-%m-%d")
   db.session.add(task)
   db.session.commit()
   return make_response(taskSchema.dumps(task),200)
@@ -112,14 +115,22 @@ def delete_task_by_title():
   return make_response('task title was not provieded',400)
 
 
-@task_ctr.route('/title',methods=['GET'])
+@task_ctr.route('extraction/<title>', methods=['GET'])
 @access_tk_required
 def get_task_title_and_date(title):
-  date=request.args.get('date')
-  user_id= load_user_by_username(User,decode_token(request.cookies.get('access_token'))['sub'])
-  tasks=Task.query.filter_by(date=date.strptime(date,"%Y-%m-%d")).all()
-  tasks_=[task for task in tasks if task.user_id==user_id and task.title==title]
-  return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id==user_id and task.title==title ])
+    date = request.args.get('date')
+    user_id = load_user_by_username(User, decode_token(
+        request.cookies.get('access_token'))['sub'])
+    tasks = Task.query.filter_by(date=date.strptime(date, "%Y-%m-%d").date()).all()
+    return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id == user_id and task.title == title])
+
+
+@task_ctr.route('/extraction/<title>', methods=['GET'])
+@access_tk_required
+def get_tasks_title(title):
+    user_id = load_user_by_username(User, decode_token(request.cookies.get('access_token'))['sub'])
+    tasks = Task.query.filter_by(title=title).all()
+    return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id == user_id])
 
 
 

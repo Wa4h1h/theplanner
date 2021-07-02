@@ -10,6 +10,10 @@ intents:
   - set_task_duration
   - set_task_start_time
   - delete_task
+  - search_task_by_date
+  - search_task_by_title_and_date 
+  - search_task_by_title
+  - search_task
 
 entities:
   - time
@@ -29,10 +33,23 @@ forms:
       duration:
         - type: from_entity
           entity: number_time
-  deleting_task:
+  searching_task_by_date:
+    required_slots:
+      time:
+        - type: from_entity
+          entity: time         
+  searching_task_by_title:
     required_slots:
       title:
         - type: from_text
+  searching_task_by_title_and_date:
+    required_slots:
+      title:
+        - type: from_text 
+      time:
+        - type: from_entity
+          entity: time   
+
 
 slots:
   title:
@@ -57,6 +74,8 @@ responses:
     - text: So what can i do for you?
     - text: Okay then, what can i do for you more?
     - text: Alright, how can i help you? 
+  utter_ask_search_type:
+    - text: Do you want to search it by title or by date or by both of them? 
   utter_goodbye:
     - text: "Bye!"
     - text: "See you next time!"
@@ -66,8 +85,14 @@ responses:
     - text: "Alright then"
   utter_something_else: 
     - text: "Something else?"
-  utter_ask_deleting_task_title:
-    - text: "can you give title of the task that you wish to delete 😁"
+  utter_ask_searching_task_by_title_title:
+    - text: "Can you give the title?"
+  utter_ask_searching_task_by_date_time:
+    - text: 'Well, can you give the date?' 
+  utter_ask_searching_task_by_title_and_date_time:
+    - text: 'Well, can you give the date?'  
+  utter_ask_searching_task_by_title_and_date_title:
+    - text: 'Well, can you give the title?'         
   utter_ask_date:
     - text: When and what time ?
   utter_create_task_begin:
@@ -80,22 +105,13 @@ responses:
     - text: Can you please give the task start time (from 0 to 23)?
   utter_ask_creating_task_duration:
     - text: Can you please give the task duration(in hours)?
-  utter_task_created_complete:
-    - custom:
-        text: 'Task {title} is saved 😁'
-        title: '{title}'
-        date: '{time}'
-        start_time: '{start_time}'
-        duration: '{duration}'
-  utter_task_deleted_complete:
-    - custom:
-        text: 'Task {title} is deleted😁'
-        title: '{title}'
 
 actions:
-  - save_task_form
-  - delete_task_form
+  - action_save_task
+  - action_search_tasks_by_title
+  - action_search_tasks_by_date
   - action_reset_all_slots
+  - action_search_tasks_by_title_and_date
 
 session_config:
   session_expiration_time: 60

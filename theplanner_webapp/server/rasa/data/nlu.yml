@@ -58,13 +58,50 @@ nlu:
     examples: |
       - i want to add a task 
       - i have to plan a task 
-      - planning a task
-      - i have a task 
+      - can you assist me to plan a task
+      - i have a task to add
       - i wich to add a task 
       - i need to add a task 
       - i need your help for planning a task 
       - i need to plan an urgent task 
-  
+      - i want to add a to-do 
+      - i have to plan a to-do 
+      - can you assist me to plan a to-do
+      - i have a to-do to save
+      - i wich to add a to-do 
+      - i need to add a to-do
+      - i need your help for planning a to-do 
+      - i need to plan an urgent to-do
+      - can you add a task 
+      - can you add another task
+      - can you add an activity
+      - can you add another activity
+      - can you add a to-do
+      - can you add another to-do
+
+  - intent: search_task    
+    examples: |
+      - i want to search for a task
+      - can you help me to search for a task
+
+  - intent: search_task_by_date    
+    examples: |
+      - by date please!
+      - by date
+
+  - intent: search_task_by_title    
+    examples: |
+      - by title please!
+      - by title
+
+  - intent: search_task_by_title_and_date    
+    examples: |
+      - both
+      - by title and date please   
+      - by title and date
+      - both of them
+      - by both of them
+
   - intent: delete_task
     examples: |
       - i want to delete a task 

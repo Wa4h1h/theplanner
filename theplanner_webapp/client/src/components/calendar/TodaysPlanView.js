@@ -1,5 +1,5 @@
-import { Grid, Typography } from '@material-ui/core';
-import React, { useState, useEffect, useContext} from 'react';
+import { Box, Grid, Typography } from '@material-ui/core';
+import React, { useState, useEffect, useContext } from 'react';
 import TaskCard from './TaskCard';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowRightRoundedIcon from '@material-ui/icons/ArrowRightRounded';
@@ -38,68 +38,72 @@ function TodaysPlanView() {
 
 	useEffect(() => {
 		reloadTasks();
-	}, [reload])
+	}, [reload]);
 
 	return (
-		<Grid
-			container
-			/* style={{
-				width: '100%',
-				paddingTop: 20,
-				justifyItems: 'center',
-			}} */
-		>
-			<Grid item xs={12}>
-				<div style={{ display: 'inline-block' }}>
-					<Typography
-						style={{
-							fontSize: 26,
-							marginBottom: 5,
-							marginRight: 10,
-							color: 'white',
-							marginLeft: 140,
-						}}
-					>
-						Today's Plan
-					</Typography>
-				</div>
-				<div style={{ display: 'inline-block', marginTop: 20 }}>
-					<AddOrChangeTaskDialog
-						function="add"
-						date={todayconv}
-						reload={reload}
-					/>
-				</div>
-			</Grid>
+		<Box display="flex" justifyContent="center" width="100%">
+			<Grid
+				container/* 
+				style={{
+					width: '100%',
+					justifyItems: 'center',
+				}} */
+			>
+				<Grid item xs={12}>
+					<div style={{ display: 'inline-block' }}>
+						<Typography
+							style={{
+								fontSize: 26,
+								marginBottom: 5,
+								marginRight: 10,
+								color: 'white',
+								marginLeft: 140,
+							}}
+						>
+							Today's Plan
+						</Typography>
+					</div>
+					<div style={{ display: 'inline-block', marginTop: 20 }}>
+						<AddOrChangeTaskDialog
+							function="add"
+							date={todayconv}
+							reload={reloadTasks}
+						/>
+					</div>
+				</Grid>
 
-			<Grid item xs={1}>
-				<IconButton disabled={count === 0} onClick={() => setCount(count - 1)}>
-					<ArrowLeftRoundedIcon
-						style={{
-							color: count === 0 ? 'gray' : 'white',
-							width: 100,
-							height: 100,
-						}}
-					/>
-				</IconButton>
-			</Grid>
-			{tasks.slice(count * 3, count * 3 + 3).map((task) => {
-				return (
-					<Grid item xs={3}>
-						<TaskCard view="todaysPlan" task={task} reload={reloadTasks} />
-					</Grid>
-				);
-			})}
-			{count * 3 + 3 < tasks.length && (
-				<Grid item xs={1}>
-					<IconButton onClick={() => setCount(count + 1)}>
-						<ArrowRightRoundedIcon
-							style={{ color: 'white', width: 100, height: 100 }}
+				<Grid item xs={1.5}>
+					<IconButton
+						disabled={count === 0}
+						onClick={() => setCount(count - 1)}
+					>
+						<ArrowLeftRoundedIcon
+							style={{
+								color: count === 0 ? 'gray' : 'white',
+								width: 100,
+								height: 100,
+							}}
 						/>
 					</IconButton>
 				</Grid>
-			)}
-		</Grid>
+				{tasks.slice(count * 3, count * 3 + 3).map((task) => {
+					return (
+						<Grid item xs={3}>
+							<TaskCard view="todaysPlan" task={task} reload={reloadTasks} />
+						</Grid>
+					);
+				})}
+				{count * 3 + 3 < tasks.length && (
+					<Grid item xs={1.5}>
+						<IconButton onClick={() => setCount(count + 1)}>
+							<ArrowRightRoundedIcon
+								style={{ color: 'white', width: 100, height: 100 }}
+							/>
+						</IconButton>
+					</Grid>
+				)}
+			</Grid>
+		</Box>
 	);
 }
 
