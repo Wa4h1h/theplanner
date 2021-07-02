@@ -1,17 +1,16 @@
-from werkzeug.wrappers import response
-from service.task_service import get_all
-from sqlalchemy.sql.elements import Null
-from routes import user_ctr
-from flask import request,make_response,jsonify
-from config import db,bcy
-from model.task import taskSchema,Task
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import decode_token
-from service.user_service import check_user,load_user_by_username,check_id,user_find_handler
 import json
+from config import bcy, db
+from flask import jsonify, make_response, request
+from flask_jwt_extended import create_access_token, decode_token
+from model.task import Task, taskSchema
 from service.auth_service import access_tk_required
-from routes import  User,userSchema
+from service.task_service import get_all
+from service.user_service import (check_id, check_user, load_user_by_username,
+                                  user_find_handler)
+from sqlalchemy.sql.elements import Null
+from werkzeug.wrappers import response
 
+from routes import User, user_ctr, userSchema
 
 
 @user_ctr.route('register',methods=['POST'])
@@ -62,7 +61,7 @@ def delete_account(user_id):
 def extract_task(user_id):
   date=request.args.get('date')
   tasks=get_all(Task,date)
-  return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks])
+  return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id==user_id])
 
 
 @user_ctr.route('<user_id>/logout')

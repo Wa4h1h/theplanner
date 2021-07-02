@@ -13,6 +13,7 @@ from rasa_sdk.events import EventType
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import AllSlotsReset
 
+
 class save_task_form(Action):
 
     def name(self) -> Text:
@@ -22,13 +23,29 @@ class save_task_form(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-            title=tracker.get_slot("title")
-            time=tracker.get_slot("time")
-            date=time[0:10]
-            duration=tracker.get_slot("duration")
-            start_time=tracker.get_slot("start_time")
-            dispatcher.utter_message(template="utter_task_created_complete", title=title, date=date, start_time=start_time, duration=duration)
-            return []
+        title = tracker.get_slot("title")
+        time = tracker.get_slot("time")
+        date = time[0:10]
+        duration = tracker.get_slot("duration")
+        start_time = tracker.get_slot("start_time")
+        dispatcher.utter_message(template="utter_task_created_complete",
+                                 title=title, date=date, start_time=start_time, duration=duration)
+        return []
+
+
+class delete_task_form(Action):
+    def name(self) -> Text:
+        return "save_task_form"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        title = tracker.get_slot("title")
+        dispatcher.utter_message(template="utter_task_deleted_complete",
+                                 title=title)
+        return []
+
 
 class ResetSlots(Action):
     def name(self) -> Text:

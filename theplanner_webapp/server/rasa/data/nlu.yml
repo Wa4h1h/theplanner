@@ -64,6 +64,16 @@ nlu:
       - i need to add a task 
       - i need your help for planning a task 
       - i need to plan an urgent task 
+  
+  - intent: delete_task
+    examples: |
+      - i want to delete a task 
+      - i have to remove a task 
+      - deleting a task
+      - i wich to delete a task 
+      - i need to delete a task 
+      - i need your help for deleting a task 
+      - i need to delete an urgent task 
 
   - regex: number_time
     examples: |

@@ -9,6 +9,7 @@ intents:
   - set_task_date
   - set_task_duration
   - set_task_start_time
+  - delete_task
 
 entities:
   - time
@@ -28,6 +29,10 @@ forms:
       duration:
         - type: from_entity
           entity: number_time
+  deleting_task:
+    required_slots:
+      title:
+        - type: from_text
 
 slots:
   title:
@@ -48,28 +53,25 @@ responses:
     - text: Hi there 😀, what can i do for you?
     - text: Howdy cowboy 🤠, what can i do for you?
     - text: Hey, what can i do for you?
-
   utter_ask_for_task:
     - text: So what can i do for you?
     - text: Okay then, what can i do for you more?
     - text: Alright, how can i help you? 
-
   utter_goodbye:
     - text: "Bye!"
     - text: "See you next time!"
     - text: "Enjoy and cu"
     - text: "cya next time"  
-
   utter_accept_deny:
     - text: "Alright then"
-
   utter_something_else: 
     - text: "Something else?"
-   
+  utter_ask_deleting_task_title:
+    - text: "can you give title of the task that you wish to delete 😁"
   utter_ask_date:
     - text: When and what time ?
   utter_create_task_begin:
-    - text: 'Allright that i can do, but i need some infos:'
+    - text: 'Alright that i can do, but i need some infos:'
   utter_ask_creating_task_title:
     - text: Can you pleave give the task title?
   utter_ask_creating_task_time:
@@ -80,14 +82,19 @@ responses:
     - text: Can you please give the task duration(in hours)?
   utter_task_created_complete:
     - custom:
-        text: 'Task {title} is saved on {time} 😁'
+        text: 'Task {title} is saved 😁'
         title: '{title}'
         date: '{time}'
         start_time: '{start_time}'
         duration: '{duration}'
+  utter_task_deleted_complete:
+    - custom:
+        text: 'Task {title} is deleted😁'
+        title: '{title}'
 
 actions:
   - save_task_form
+  - delete_task_form
   - action_reset_all_slots
 
 session_config:

@@ -22,3 +22,13 @@ rules:
     - intent: deny
     - action: utter_accept_deny
     - action: utter_goodbye
+
+- rule: activate delete task
+  steps:
+    - intent: delete_task
+    - action: action_reset_all_slots
+    - action: deleting_task
+    - active_loop: deleting_task 
+    - active_loop: null 
+    - action: utter_task_deleted_complete 
+    - action: utter_something_else
