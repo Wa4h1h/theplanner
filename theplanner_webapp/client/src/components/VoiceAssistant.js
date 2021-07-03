@@ -51,6 +51,16 @@ const useStyles = makeStyles((theme) => ({
 
 const VoiceAssistant = () => {
 	const classes = useStyles();
+	let speech = new SpeechSynthesisUtterance();
+	speech.lang = 'en';
+	let voices = [];
+	window.speechSynthesis.onvoiceschanged = () => {
+		voices = window.speechSynthesis.getVoices();
+		speech.voice = voices[0];
+	};
+	speech.rate = 1;
+	speech.volume = 1;
+	speech.pitch = 0.5;
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -67,6 +77,7 @@ const VoiceAssistant = () => {
 
 	const [history, setHistory] = React.useState([]);
 	const { reload, setReload } = useContext(ReloadContext);
+	const [textToSpeech, setTextToSpeech] = useState(null);
 	const textfield_ref = useRef();
 
 	useEffect(() => {
@@ -92,6 +103,12 @@ const VoiceAssistant = () => {
 			handleSend();
 		}
 	}, [interimTranscript, finalTranscript]);
+
+	useEffect(() => {
+		speech.text = textToSpeech;
+		window.speechSynthesis.speak(speech);
+	}, [textToSpeech]);
+
 	if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
 		return null;
 	}
@@ -100,6 +117,7 @@ const VoiceAssistant = () => {
 			'Your browser does not support speech recognition software! Try Chrome desktop, maybe?'
 		);
 	}
+
 	const listenContinuously = () => {
 		SpeechRecognition.startListening({
 			language: 'en-GB',
@@ -119,6 +137,11 @@ const VoiceAssistant = () => {
 	const handleSend = (event) => {
 		chat();
 	};
+
+	/* const speak = (text) => {
+		speech.text = text;
+		window.speechSynthesis.speak(speech);
+	}; */
 
 	const sendToRasa = (data) => {
 		setIsLoading(true);
@@ -186,7 +209,7 @@ const VoiceAssistant = () => {
 						}
 					>
 						{chat.msg}
-						{chat.sender < 0 && ' speech'}
+						{chat.sender < 0 ? setTextToSpeech(chat.msg) : null}
 					</div>
 				</Grid>
 			</Grid>
