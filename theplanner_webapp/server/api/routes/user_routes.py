@@ -60,8 +60,8 @@ def delete_account(user_id):
 @user_find_handler
 def extract_task(user_id):
   date=request.args.get('date')
-  tasks=get_all(Task,date)
-  return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id==user_id])
+  tasks=get_all(Task,date,user_id)  
+  return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks])
 
 
 @user_ctr.route('<user_id>/logout')

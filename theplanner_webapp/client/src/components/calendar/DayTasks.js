@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import React, { useState , useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import ArrowDropUpRoundedIcon from '@material-ui/icons/ArrowDropUpRounded';
 import ArrowDropDownRoundedIcon from '@material-ui/icons/ArrowDropDownRounded';
@@ -35,16 +35,16 @@ function DayTasks(props) {
 
 	useEffect(() => {
 		reloadTasks();
-	}, [reload])
+	}, [reload]);
 
 	const [count, setCount] = useState(0);
 
 	return (
 		<div
 			style={{
-				marginLeft: 10,
+				marginLeft: 9,
 				height: '100%',
-				marginRight: 10,
+				marginRight: 9,
 				width: 315,
 				display: 'inline-block',
 				borderRadius: 10,
@@ -89,15 +89,12 @@ function DayTasks(props) {
 					</IconButton>
 				</Box>
 			)}
-			{tasks.length > 3
-				? tasks.slice(count * 3, count * 3 + 3).map((task) => {
-						console.log(task);
-						return <TaskCard view="calendarView" task={task} reload={reloadTasks} />;
-				  })
-				: tasks.map((task) => {
-						return <TaskCard view="calendarView" task={task} reload={reloadTasks} />;
-				  })}
-			{count * 3 + 3 <= tasks.length && (
+			{tasks.slice(count * 3, count * 3 + 3).map((task) => {
+				return (
+					<TaskCard view="calendarView" task={task} reload={reloadTasks} />
+				);
+			})}
+			{count * 3 + 3 < tasks.length && (
 				<Box display="flex" justifyContent="center" width="100%">
 					<IconButton
 						onClick={() => {

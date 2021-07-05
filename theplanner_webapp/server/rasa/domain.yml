@@ -68,7 +68,7 @@ slots:
 responses:
   utter_greet:
     - text: Hi there 😀, what can i do for you?
-    - text: Howdy cowboy 🤠, what can i do for you?
+    - text: Howdy cowboy, what can i do for you?
     - text: Hey, what can i do for you?
   utter_ask_for_task:
     - text: So what can i do for you?

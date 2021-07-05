@@ -115,22 +115,21 @@ def delete_task_by_title():
   return make_response('task title was not provieded',400)
 
 
-@task_ctr.route('extraction/<title>', methods=['GET'])
+@task_ctr.route('extraction/<title>/<date>', methods=['GET'])
 @access_tk_required
-def get_task_title_and_date(title):
-    date = request.args.get('date')
+def get_task_title_and_date(title, date):
     user_id = load_user_by_username(User, decode_token(
         request.cookies.get('access_token'))['sub'])
-    tasks = Task.query.filter_by(date=date.strptime(date, "%Y-%m-%d").date()).all()
-    return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id == user_id and task.title == title])
+    tasks = Task.query.filter_by(date=date.strptime(date, "%Y-%m-%d").date(), title=title, user_id=user_id).all()
+    return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks ])
 
 
 @task_ctr.route('/extraction/<title>', methods=['GET'])
 @access_tk_required
 def get_tasks_title(title):
     user_id = load_user_by_username(User, decode_token(request.cookies.get('access_token'))['sub'])
-    tasks = Task.query.filter_by(title=title).all()
-    return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks if task.user_id == user_id])
+    tasks = Task.query.filter_by(title=title, user_id=user_id).all()
+    return jsonify(tasks=[json.loads(taskSchema.dumps(task)) for task in tasks])
 
 
 

@@ -54,8 +54,8 @@ function CalendarView() {
 								today.getFullYear() === startDate.getFullYear()
 									? 'gray'
 									: 'white',
-							width: 50,
-							height: 50,
+							width: 45,
+							height: 45,
 						}}
 					/>
 				</IconButton>
@@ -70,7 +70,7 @@ function CalendarView() {
 			<Grid item xs={0.5}>
 				<IconButton onClick={() => handleNextFiveDays()}>
 					<ArrowRightRoundedIcon
-						style={{ color: 'white', width: 50, height: 50 }}
+						style={{ color: 'white', width: 45, height: 45 }}
 					/>
 				</IconButton>
 			</Grid>

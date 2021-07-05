@@ -42,7 +42,7 @@ nlu:
       - correct
       - nice
       - alright
-      - yes i need you
+      - yes 
 
   - intent: deny
     examples: |

@@ -4,9 +4,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ScheduleIcon from '@material-ui/icons/Schedule';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { IconButton } from '@material-ui/core';
-
 
 const useStyles = makeStyles((theme) => ({
 	scheduleIcon: {
@@ -35,9 +32,6 @@ export default function Navbar() {
 					<Typography className={classes.title} variant="h6" color="inherit">
 						thePlanner
 					</Typography>
-					<IconButton>
-						<NotificationsIcon style={{color: 'white', width: 45, height:45}}/>
-					</IconButton>
 				</Toolbar>
 			</AppBar>
 		</div>

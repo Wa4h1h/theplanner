@@ -15,6 +15,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from '../utils';
 import { ReloadContext } from '../contexts/ReloadContext';
+import { SearchContext } from '../contexts/SearchContext';
 const loadImage = require.context('../img', true);
 
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const VoiceAssistant = () => {
 	const classes = useStyles();
+	const { setQuery } = useContext(SearchContext);
 	let speech = new SpeechSynthesisUtterance();
 	speech.lang = 'en';
 	let voices = [];
@@ -77,7 +79,7 @@ const VoiceAssistant = () => {
 
 	const [history, setHistory] = React.useState([]);
 	const { reload, setReload } = useContext(ReloadContext);
-	const [textToSpeech, setTextToSpeech] = useState(null);
+	//const [textToSpeech, setTextToSpeech] = useState(null);
 	const textfield_ref = useRef();
 
 	useEffect(() => {
@@ -104,10 +106,10 @@ const VoiceAssistant = () => {
 		}
 	}, [interimTranscript, finalTranscript]);
 
-	useEffect(() => {
+	/* useEffect(() => {
 		speech.text = textToSpeech;
 		window.speechSynthesis.speak(speech);
-	}, [textToSpeech]);
+	}, [textToSpeech]); */
 
 	if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
 		return null;
@@ -138,10 +140,10 @@ const VoiceAssistant = () => {
 		chat();
 	};
 
-	/* const speak = (text) => {
+	function speak(text) {
 		speech.text = text;
 		window.speechSynthesis.speak(speech);
-	}; */
+	}
 
 	const sendToRasa = (data) => {
 		setIsLoading(true);
@@ -151,13 +153,16 @@ const VoiceAssistant = () => {
 			body: JSON.stringify(data),
 		})
 			.then(function (response) {
-				console.log(response);
 				return response.json();
 			})
 			.then(function (data) {
 				let botMessages = data.map((response) => {
 					if (response.custom) {
 						let obj = response.custom;
+						let newObj = {
+							title: null,
+							date: null,
+						};
 						if (obj.save_task) {
 							var task = {
 								date: obj.save_task.date.slice(0, 10),
@@ -172,16 +177,28 @@ const VoiceAssistant = () => {
 								axios
 									.post(`tasks/?user=${localStorage.getItem('userId')}`, task)
 									.then((res) => {
-										console.log(res);
 										setReload(!reload);
 									});
 							} catch (err) {
 								console.log(err);
 							}
 						} else if (obj.search_tasks_by_date) {
+							newObj.date = obj.search_tasks_by_date.date;
+							setQuery(newObj);
+						} else if (obj.search_tasks_by_title) {
+							newObj.title = obj.search_tasks_by_title.title;
+							setQuery(newObj);
+						} else {
+							newObj.title = obj.search_tasks_by_title_and_date.title;
+							newObj.date = obj.search_tasks_by_title_and_date.date;
+							setQuery(newObj);
 						}
+						speech.text = response.custom.text;
+						window.speechSynthesis.speak(speech);
 						return { sender: -1, msg: response.custom.text };
 					} else {
+						speech.text = response.text;
+						window.speechSynthesis.speak(speech);
 						return { sender: -1, msg: response.text };
 					}
 				});
@@ -209,7 +226,6 @@ const VoiceAssistant = () => {
 						}
 					>
 						{chat.msg}
-						{chat.sender < 0 ? setTextToSpeech(chat.msg) : null}
 					</div>
 				</Grid>
 			</Grid>

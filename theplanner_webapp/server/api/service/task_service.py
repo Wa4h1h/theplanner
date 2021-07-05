@@ -9,9 +9,8 @@ def check_task_id(Task,id):
 def check_task_title(Task,title):
   return Task.query.filter_by(title=title).first()
 
-def get_all(Task,date):
-  return Task.query.filter_by(date=datetime.strptime(date,"%Y-%m-%d").date()).all()
-
+def get_all(Task,date,user_id):
+  return Task.query.filter_by(date=datetime.strptime(date,"%Y-%m-%d").date(), user_id=user_id).all()
 
 def task_find_handler(req):
   def handler(**kwargs):
