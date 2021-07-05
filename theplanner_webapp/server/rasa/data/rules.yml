@@ -17,16 +17,6 @@ rules:
     - action: action_save_task
     - action: utter_something_else
 
-- rule: activate search by date form
-  steps:
-    - intent: search_task_by_date
-    - action: action_reset_all_slots
-    - action: searching_task_by_date
-    - active_loop: searching_task_by_date
-    - active_loop: null
-    - action: action_search_tasks_by_date
-    - action: utter_something_else
-
 - rule: affirm something else
   steps:
     - intent: affirm
@@ -42,6 +32,16 @@ rules:
   steps: 
     - intent: search_task
     - action: utter_ask_search_type
+
+- rule: activate search by date form
+  steps:
+    - intent: search_task_by_date
+    - action: action_reset_all_slots
+    - action: searching_task_by_date
+    - active_loop: searching_task_by_date
+    - active_loop: null
+    - action: action_search_tasks_by_date 
+    - action: utter_something_else  
 
 - rule: activate search by title form
   steps:
@@ -61,4 +61,6 @@ rules:
     - active_loop: searching_task_by_title_and_date 
     - active_loop: null 
     - action: action_search_tasks_by_title_and_date 
-    - action: utter_something_else    
+    - action: utter_something_else
+
+       

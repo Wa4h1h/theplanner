@@ -61,7 +61,7 @@ function TaskCard(props) {
 					{props.task.title}
 				</Typography>
 				<Typography style={{ fontSize: 14, fontWeight: 'bold' }}>
-					{props.task.start_time}H - {props.task.end_time}H
+					{props.search ? props.task.date + " - ": null} {props.task.start_time}H - {props.task.end_time}H
 				</Typography>
 			</div>
 			{checked === true ? (
