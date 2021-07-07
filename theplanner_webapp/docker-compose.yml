@@ -1,0 +1,16 @@
+version: '3.8'
+
+services: 
+ 
+    backend_theplanner:
+        build: ./server/api
+        image: backend_theplanner
+        ports: 
+            - "5000:5000"
+    frontend_theplanner:
+        build: ./client
+        image: frontend_theplanner
+        ports: 
+            - "3000:3000"
+        depends_on: 
+            - backend_theplanner
