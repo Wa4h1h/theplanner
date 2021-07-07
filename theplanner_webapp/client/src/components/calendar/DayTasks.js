@@ -89,11 +89,16 @@ function DayTasks(props) {
 					</IconButton>
 				</Box>
 			)}
-			{tasks.slice(count * 3, count * 3 + 3).map((task) => {
-				return (
-					<TaskCard view="calendarView" task={task} reload={reloadTasks} />
-				);
-			})}
+			{tasks
+				.sort((task1, task2) => {
+					return task1.start_time - task2.start_time;
+				})
+				.slice(count * 3, count * 3 + 3)
+				.map((task) => {
+					return (
+						<TaskCard view="calendarView" task={task} reload={reloadTasks} />
+					);
+				})}
 			{count * 3 + 3 < tasks.length && (
 				<Box display="flex" justifyContent="center" width="100%">
 					<IconButton

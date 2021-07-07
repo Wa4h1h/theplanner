@@ -21,30 +21,6 @@ const useStyles = makeStyles((theme) => ({
 			backgroundColor: '#62F9E6',
 		},
 	},
-	fabAccount: {
-		position: 'fixed',
-		bottom: theme.spacing(4),
-		left: theme.spacing(15),
-		width: 50,
-		height: 50,
-		color: '#132C33',
-		backgroundColor: '#DDFCF8',
-		'&:hover': {
-			backgroundColor: '#62F9E6',
-		},
-	},
-	fabUrgent: {
-		position: 'fixed',
-		bottom: theme.spacing(11),
-		left: theme.spacing(11),
-		width: 50,
-		height: 50,
-		color: '#132C33',
-		backgroundColor: '#DDFCF8',
-		'&:hover': {
-			backgroundColor: '#62F9E6',
-		},
-	},
 	fabLogout: {
 		position: 'fixed',
 		bottom: theme.spacing(15),
@@ -65,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Settings() {
 	const classes = useStyles();
-	const [open, setOpen] = useState(false);
 	const { setLoggedIn } = useContext(AuthStateContext);
 
 	const handleLogout = async () => {
@@ -85,33 +60,9 @@ function Settings() {
 			<Fab
 				className={classes.fab}
 				color="#132C33"
-				onClick={() => setOpen(!open)}
-			>
-				<SettingsRoundedIcon className={classes.icon} />
-			</Fab>
-			<Fab
-				className={classes.fabAccount}
-				style={{ visibility: open ? 'visible' : 'hidden' }}
-				color="#132C33"
-			>
-				<AccountCircleRoundedIcon />
-			</Fab>
-			<Fab
-				className={classes.fabUrgent}
-				style={{ visibility: open ? 'visible' : 'hidden' }}
-				color="#132C33"
-			>
-				<ErrorOutlineRoundedIcon />
-			</Fab>
-			<Fab
-				className={classes.fabLogout}
 				onClick={handleLogout}
-				style={{
-					visibility: open ? 'visible' : 'hidden',
-				}}
-				color="#132C33"
 			>
-				<ExitToAppRoundedIcon />
+				<ExitToAppRoundedIcon className={classes.icon} />
 			</Fab>
 		</React.Fragment>
 	);

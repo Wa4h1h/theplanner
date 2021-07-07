@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
 import Popover from '@material-ui/core/Popover';
-import { Grid, IconButton } from '@material-ui/core';
+import { Grid, Box, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
 import SpeechRecognition, {
@@ -217,6 +217,7 @@ const VoiceAssistant = () => {
 				container
 				item
 				direction="column"
+				style={{paddingRight: 20}}
 				alignItems={chat.sender > 0 ? 'flex-end' : 'flex-start'}
 			>
 				<Grid item xs={6}>
@@ -234,8 +235,12 @@ const VoiceAssistant = () => {
 
 	let messages = (
 		<Grid item>
-			<Card>
-				<CardContent>There is no conversation yet!</CardContent>
+			<Card style={{ backgroundColor: '#132C33', marginRight: 20 }}>
+				<Box display="flex" justifyContent="center" p={2} width="100%">
+					<Typography style={{ fontSize: 20, color: 'white'}}>
+						There is no conversation yet!
+					</Typography>
+				</Box>
 			</Card>
 		</Grid>
 	);

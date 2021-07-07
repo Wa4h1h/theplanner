@@ -125,10 +125,12 @@ nlu:
 
   - intent: set_task_start_time
     examples: |
-      - at [1](number_time)
-      - at [10](number_time)  
-      - [3](number_time)
-      - [21](number_time) 
+      - at 4 p.m.
+      - at 9 a.m. 
+      - at 21 
+      - at 10 o'clock 
+      - 5 a.m.
+      - 11 p.m.
 
   - intent: set_task_date
     examples: |
