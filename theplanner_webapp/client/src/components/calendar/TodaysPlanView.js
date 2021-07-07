@@ -41,9 +41,14 @@ function TodaysPlanView() {
 	}, [reload]);
 
 	return (
-		<Box display="flex" justifyContent="center" width="100%">
+		<Box
+			display="flex"
+			paddingLeft="150px"
+			justifyContent="center"
+			width="100%"
+		>
 			<Grid
-				container/* 
+				container /* 
 				style={{
 					width: '100%',
 					justifyItems: 'center',
@@ -86,13 +91,18 @@ function TodaysPlanView() {
 						/>
 					</IconButton>
 				</Grid>
-				{tasks.slice(count * 3, count * 3 + 3).map((task) => {
-					return (
-						<Grid item xs={3}>
-							<TaskCard view="todaysPlan" task={task} reload={reloadTasks} />
-						</Grid>
-					);
-				})}
+				{tasks
+					.sort((task1, task2) => {
+						return task1.start_time - task2.start_time;
+					})
+					.slice(count * 3, count * 3 + 3)
+					.map((task) => {
+						return (
+							<Grid item xs={3}>
+								<TaskCard view="todaysPlan" task={task} reload={reloadTasks} />
+							</Grid>
+						);
+					})}
 				{count * 3 + 3 < tasks.length && (
 					<Grid item xs={1.5}>
 						<IconButton onClick={() => setCount(count + 1)}>

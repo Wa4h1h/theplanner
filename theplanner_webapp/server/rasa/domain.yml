@@ -29,7 +29,7 @@ forms:
           entity: time
       start_time:
         - type: from_entity
-          entity: number_time
+          entity: time
       duration:
         - type: from_entity
           entity: number_time
@@ -102,7 +102,7 @@ responses:
   utter_ask_creating_task_time:
     - text: Can you please give the task date?
   utter_ask_creating_task_start_time:
-    - text: Can you please give the task start time (from 0 to 23)?
+    - text: Can you please give the task start time?
   utter_ask_creating_task_duration:
     - text: Can you please give the task duration(in hours)?
 

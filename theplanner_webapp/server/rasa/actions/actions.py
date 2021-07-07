@@ -27,6 +27,7 @@ class saveTask(Action):
             date=time[0:10]
             duration=tracker.get_slot("duration")
             start_time=tracker.get_slot("start_time")
+            start_time=start_time[11:13]
             save_task = { 
                 "text": f"Task {title} is saved on {date} 😁",
                 "save_task" : {
