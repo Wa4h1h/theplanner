@@ -13,7 +13,7 @@ pipeline:
   - name: DIETClassifier
     epochs: 100
   - name: "DucklingEntityExtractor"
-    url: "http://localhost:8000"
+    url: "http://rasa_duckling_theplanner:8000"
     dimensions: ["time"]
     timezone: "Europe/Berlin"
   - name: EntitySynonymMapper

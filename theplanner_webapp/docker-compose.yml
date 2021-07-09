@@ -7,6 +7,20 @@ services:
         image: backend_theplanner
         ports: 
             - "5000:5000"
+    
+    rasa_duckling_theplanner:
+        image: rasa/duckling
+        ports: 
+            - "8000:8000"
+     
+    rasa_theplanner:
+        build: ./server/rasa
+        image: rasa_theplanner
+        depends_on: 
+            - rasa_duckling_theplanner
+        ports: 
+            - "5005:5005"
+
     frontend_theplanner:
         build: ./client
         image: frontend_theplanner
@@ -14,3 +28,6 @@ services:
             - "3000:3000"
         depends_on: 
             - backend_theplanner
+            - rasa_theplanner
+
+            
